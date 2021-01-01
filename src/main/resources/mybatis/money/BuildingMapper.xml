@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.money.building.mapper.BuildingMapper">
+    
+    <resultMap type="Building" id="BuildingResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="linkman"    column="linkman"    />
+        <result property="linkphone"    column="linkphone"    />
+        <result property="area"    column="area"    />
+        <result property="address"    column="address"    />
+        <result property="cretime"    column="cretime"    />
+        <result property="creuser"    column="creuser"    />
+        <result property="updtime"    column="updtime"    />
+        <result property="upduser"    column="upduser"    />
+    </resultMap>
+
+    <sql id="selectBuildingVo">
+        select id, name, linkman, linkphone, area, address, cretime, creuser, updtime, upduser from building
+    </sql>
+
+    <select id="selectBuildingList" parameterType="Building" resultMap="BuildingResult">
+        <include refid="selectBuildingVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="linkman != null  and linkman != ''"> and linkman = #{linkman}</if>
+            <if test="linkphone != null  and linkphone != ''"> and linkphone = #{linkphone}</if>
+            <if test="area != null  and area != ''"> and area = #{area}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+        </where>
+    </select>
+    
+    <select id="selectBuildingById" parameterType="Long" resultMap="BuildingResult">
+        <include refid="selectBuildingVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBuilding" parameterType="Building" useGeneratedKeys="true" keyProperty="id">
+        insert into building
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="linkman != null and linkman != ''">linkman,</if>
+            <if test="linkphone != null and linkphone != ''">linkphone,</if>
+            <if test="area != null">area,</if>
+            <if test="address != null">address,</if>
+            <if test="cretime != null">cretime,</if>
+            <if test="creuser != null">creuser,</if>
+            <if test="updtime != null">updtime,</if>
+            <if test="upduser != null">upduser,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="linkman != null and linkman != ''">#{linkman},</if>
+            <if test="linkphone != null and linkphone != ''">#{linkphone},</if>
+            <if test="area != null">#{area},</if>
+            <if test="address != null">#{address},</if>
+            <if test="cretime != null">#{cretime},</if>
+            <if test="creuser != null">#{creuser},</if>
+            <if test="updtime != null">#{updtime},</if>
+            <if test="upduser != null">#{upduser},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBuilding" parameterType="Building">
+        update building
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="linkman != null and linkman != ''">linkman = #{linkman},</if>
+            <if test="linkphone != null and linkphone != ''">linkphone = #{linkphone},</if>
+            <if test="area != null">area = #{area},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="cretime != null">cretime = #{cretime},</if>
+            <if test="creuser != null">creuser = #{creuser},</if>
+            <if test="updtime != null">updtime = #{updtime},</if>
+            <if test="upduser != null">upduser = #{upduser},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBuildingById" parameterType="Long">
+        delete from building where id = #{id}
+    </delete>
+
+    <delete id="deleteBuildingByIds" parameterType="String">
+        delete from building where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
